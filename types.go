@@ -70,6 +70,7 @@ const (
 	TypeNSEC3      uint16 = 50
 	TypeNSEC3PARAM uint16 = 51
 	TypeTLSA       uint16 = 52
+	TypeSMIMEA     uint16 = 53
 	TypeHIP        uint16 = 55
 	TypeNINFO      uint16 = 56
 	TypeRKEY       uint16 = 57
@@ -1040,6 +1041,22 @@ type TLSA struct {
 }
 
 func (rr *TLSA) String() string {
+	return rr.Hdr.String() +
+		strconv.Itoa(int(rr.Usage)) +
+		" " + strconv.Itoa(int(rr.Selector)) +
+		" " + strconv.Itoa(int(rr.MatchingType)) +
+		" " + rr.Certificate
+}
+
+type SMIMEA struct {
+	Hdr          RR_Header
+	Usage        uint8
+	Selector     uint8
+	MatchingType uint8
+	Certificate  string `dns:"hex"`
+}
+
+func (rr *SMIMEA) String() string {
 	return rr.Hdr.String() +
 		strconv.Itoa(int(rr.Usage)) +
 		" " + strconv.Itoa(int(rr.Selector)) +
